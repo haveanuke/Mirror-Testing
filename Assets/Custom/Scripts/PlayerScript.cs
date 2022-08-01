@@ -23,8 +23,6 @@ public class PlayerScript : NetworkBehaviour
     private Weapon activeWeapon;
     private float weaponCooldownTime;
 
-    public InputField inputFieldMessage;
-
     [SyncVar(hook = nameof(OnNameChanged))]
     public string playerName;
 
@@ -97,7 +95,7 @@ public class PlayerScript : NetworkBehaviour
         if (Input.GetButtonDown("Fire2"))
         {
             selectedWeaponLocal += 1;
-            if (selectedWeaponLocal > weaponArray.Length)
+            if (selectedWeaponLocal > weaponArray.Length || selectedWeaponLocal == 3)
             {
                 selectedWeaponLocal = 1;
             }
@@ -119,6 +117,15 @@ public class PlayerScript : NetworkBehaviour
     void OnNameChanged(string _Old, string _New)
     {
         playerNameText.text = playerName;
+    }
+    public void Start()
+    {
+        selectedWeaponLocal += 1;
+        if (selectedWeaponLocal > weaponArray.Length || selectedWeaponLocal == 3)
+        {
+            selectedWeaponLocal = 1;
+        }
+        CmdChangeActiveWeapon(selectedWeaponLocal);
     }
 
     void OnColorChanged(Color _Old, Color _New)
