@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Mirror;
 
 public class PlayerScript : NetworkBehaviour
 {
-    float speed = 40f;
+    public float speed = 40f;
     Rigidbody rb;
     Vector2 turn;
     public Vector2 velocity;
@@ -91,6 +88,15 @@ public class PlayerScript : NetworkBehaviour
 
         rb.transform.Rotate(0, turn.x, 0);
         rb.velocity = new Vector3(velocity.x, rb.velocity.y, velocity.y) * speed;
+
+        if (Input.GetButton("Shift")) //changes speed based off if player is holding down the left shift button (set up in project settings)
+        {
+            speed = 50f;
+        }
+        else
+        {
+            speed = 40f;
+        }
 
         if (Input.GetButtonDown("Fire2"))
         {
@@ -180,7 +186,7 @@ public class PlayerScript : NetworkBehaviour
     {
         GameObject bullet = Instantiate(activeWeapon.weaponBullet, activeWeapon.weaponFirePosition.position, activeWeapon.weaponFirePosition.rotation); //spawns bullet 
         bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * activeWeapon.weaponSpeed; //edits bullets velocity to make it shoot out
-        Destroy(bullet, activeWeapon.weaponLife); //supposed to delete shot after set times
+        Destroy(bullet, activeWeapon.weaponLife); //supposed to delete shot after set time if it misses player
         
     }
     [Command]
@@ -198,7 +204,7 @@ public class PlayerScript : NetworkBehaviour
     
     [Command]
     public void CmdSendPlayerMessage(string _text)
-    { //TODO: add custom messages. would include locally controlled editable text bar
+    { 
         if (sceneScript)
             sceneScript.statusText = $"{playerName}: " + _text;
     }

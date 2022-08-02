@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
@@ -14,7 +12,7 @@ public class InGameCanvasHud : MonoBehaviour
     public Text serverText;
     public Text clientText;
 
-    public void ButtonStop()
+    public void ButtonStop() //currently does not work
     {
         //stop host if hosting
         if (NetworkServer.active && NetworkClient.isConnected)
@@ -71,11 +69,5 @@ public class InGameCanvasHud : MonoBehaviour
     {
         buttonStop.onClick.AddListener(ButtonStop);
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
