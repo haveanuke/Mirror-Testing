@@ -112,6 +112,12 @@ public class PlayerScript : NetworkBehaviour
                 CmdShootRay();
             }
         }
+
+        if (Input.GetButtonDown("Reload"))
+        {
+            activeWeapon.weaponAmmo = 15;
+            sceneScript.UIAmmo(activeWeapon.weaponAmmo);
+        }
     }
 
     void OnNameChanged(string _Old, string _New)
@@ -155,6 +161,15 @@ public class PlayerScript : NetworkBehaviour
             }
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.tag == "Bullet")
+        {
+            Destroy(collision.gameObject); //deletes bullet when it collides with players
+        }
+    }
+
     [Command]
     void CmdShootRay()
     {
@@ -165,7 +180,8 @@ public class PlayerScript : NetworkBehaviour
     {
         GameObject bullet = Instantiate(activeWeapon.weaponBullet, activeWeapon.weaponFirePosition.position, activeWeapon.weaponFirePosition.rotation); //spawns bullet 
         bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * activeWeapon.weaponSpeed; //edits bullets velocity to make it shoot out
-        Destroy(bullet, activeWeapon.weaponLife); //supposed to delete shot after set timeds
+        Destroy(bullet, activeWeapon.weaponLife); //supposed to delete shot after set times
+        
     }
     [Command]
     public void CmdChangeActiveWeapon(int newIndex)
